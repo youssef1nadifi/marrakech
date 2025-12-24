@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Official Luxury Guide to Marrakech. Discover riads, gastronomy, and timeless adventures in the Red City.">
+    <title>Marrakech | The Red City</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Lato"', 'sans-serif'],
+                    },
+                    colors: {
+                        ochre: '#C86B4D', 
+                        gold: '#D4AF37',  
+                        majorelle: '#00589B', 
+                        sand: '#F5F1E6',  
+                        green: '#1E4D2B', 
+                        dark: '#1A1A1A'
+                    },
+                    backgroundImage: {
+                        'pattern-zellige': "url('https://www.transparenttextures.com/patterns/moroccan-flower.png')",
+                    },
+                    boxShadow: {
+                        'gold-glow': '0 0 15px rgba(212, 175, 55, 0.3)',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #F5F1E6;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
+        }
+        .loader-logo {
+            animation: pulse-gold 2s infinite;
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: opacity, transform;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+        
+        @keyframes kenburns {
+            0% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .ken-burns-bg {
+            animation: kenburns 15s ease-out forwards;
+        }
+
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        .text-shadow-sm { text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        
+        .underline-anim {
+            position: relative;
+        }
+        .underline-anim::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #D4AF37;
+            transition: width 0.3s ease;
+        }
+        .underline-anim:hover::after {
+            width: 100%;
+        }
+
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .img-zoom-container {
+            overflow: hidden;
+        }
+        .img-zoom-container img {
+            transition: transform 0.7s ease;
+        }
+        .img-zoom-container:hover img {
+            transform: scale(1.1);
+        }
+
+        .modal-open {
+            overflow: hidden;
+        }
+        
+        .step-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .step-content.active {
+            display: block;
+        }
+
+        input[type="date"] {
+            border: 1px solid #e5e7eb;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            font-family: 'Lato', sans-serif;
+        }
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #D4AF37;
+            padding: 2px solid #D4AF37;
+        }
+    </style>
+</head>
+<body class="font-sans text-dark bg-white antialiased selection:bg-gold selection:text-white">
+
+    <div id="preloader">
+        <div class="text-center">
+            <div class="w-16 h-16 rounded-full border-4 border-gold mx-auto mb-4 loader-logo flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-ochre"></div>
+            </div>
+            <h2 class="text-2xl font-serif font-bold tracking-[0.2em] text-ochre">MARRAKECH</h2>
+            <p class="text-xs uppercase tracking-widest mt-2 text-gray-500">Loading Luxury</p>
+        </div>
+    </div>
+
+    <div id="booking-wizard" class="fixed inset-0 z-[200] bg-sand hidden flex flex-col modal-open">
+        <div class="bg-white border-b border-gray-200 p-4 shadow-sm flex justify-between items-center z-10">
+            <div class="flex items-center gap-4">
+                <button onclick="closeWizard()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-6 h-6 text-gray-600"></i>
+                </button>
+                <div>
+                    <h2 class="font-serif text-xl font-bold text-dark">Trip Planner</h2>
+                    <p id="wizard-location-title" class="text-xs text-gold font-bold uppercase tracking-widest">Build Your Itinerary</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="step-indicator w-2 h-2 rounded-full bg-gray-300 transition-colors" id="step-dot-1"></div>
+                <div class="step-indicator w-2 h-2 rounded-full bg-gray-300 transition-colors" id="step-dot-2"></div>
+                <div class="step-indicator w-2 h-2 rounded-full bg-gray-300 transition-colors" id="step-dot-3"></div>
+                <div class="step-indicator w-2 h-2 rounded-full bg-gray-300 transition-colors" id="step-dot-4"></div>
+                <div class="step-indicator w-2 h-2 rounded-full bg-gray-300 transition-colors" id="step-dot-5"></div>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 md:p-12 relative">
+            <div class="max-w-5xl mx-auto">
+                
+                <div id="step-1" class="step-content active">
+                    <h3 class="text-3xl font-serif mb-2">Schedule Your Journey</h3>
+                    <p class="text-gray-500 mb-8">Plan your itinerary. Select a date for your first location, and add more days for other adventures.</p>
+                    
+                    <div id="itinerary-container" class="space-y-6">
+                    </div>
+
+                    <div class="mt-8 border-t border-gray-200 pt-6">
+                        <button onclick="addDestination()" class="flex items-center gap-2 text-ochre font-bold uppercase tracking-widest text-xs hover:text-dark transition-colors">
+                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                            Add Another Destination (Next Day)
+                        </button>
+                    </div>
+                </div>
+
+                <div id="step-2" class="step-content">
+                    <h3 class="text-3xl font-serif mb-2">Curate Experiences</h3>
+                    <p class="text-gray-500 mb-8">Select activities for each day of your trip.</p>
+                    <div id="wizard-activities-container">
+                    </div>
+                </div>
+
+                <div id="step-3" class="step-content">
+                    <h3 class="text-3xl font-serif mb-2">Choose Your Chariot</h3>
+                    <p class="text-gray-500 mb-8">Travel in style. One vehicle for the entire duration of your trip.</p>
+                    <div id="wizard-vehicles-grid" class="grid md:grid-cols-3 gap-6">
+                    </div>
+                </div>
+
+                <div id="step-4" class="step-content">
+                    <h3 class="text-3xl font-serif mb-2">Your Private Chauffeur</h3>
+                    <p class="text-gray-500 mb-8">Select your expert guide.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div>
+                            <h4 class="text-sm font-bold uppercase tracking-widest text-ochre mb-4">Select Driver</h4>
+                            <div id="wizard-drivers-grid" class="space-y-4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-5" class="step-content">
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div>
+                            <h3 class="text-3xl font-serif mb-2">Confirm Your Booking</h3>
+                            <p class="text-gray-500 mb-8">Review your multi-day itinerary.</p>
+                            
+                            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                                <h4 class="text-sm font-bold uppercase tracking-widest text-ochre mb-6 border-b pb-2">Trip Summary</h4>
+                                <div id="summary-content" class="space-y-4 text-sm text-gray-700">
+                                </div>
+                                <div class="mt-6 pt-4 border-t flex justify-between items-center">
+                                    <span class="font-bold text-lg">Total Amount</span>
+                                    <span id="summary-total" class="font-serif text-2xl font-bold text-gold">$0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-3xl font-serif mb-2">Payment</h3>
+                            <p class="text-gray-500 mb-8">Secure your reservation.</p>
+
+                            <div class="space-y-4">
+                                <button onclick="sendToWhatsApp()" class="w-full flex items-center justify-between p-6 bg-[#25D366] text-white rounded-lg hover:bg-[#128C7E] transition-all shadow-lg group">
+                                    <div class="flex items-center gap-4">
+                                        <div class="bg-white/20 p-2 rounded-full"><i data-lucide="message-circle" class="w-6 h-6"></i></div>
+                                        <div class="text-left">
+                                            <span class="block font-bold text-lg">Book via WhatsApp</span>
+                                            <span class="text-xs opacity-90">Send itinerary to agent</span>
+                                        </div>
+                                    </div>
+                                    <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                                </button>
+
+                                <button onclick="alert('Payment gateway would open here.')" class="w-full flex items-center justify-between p-6 bg-dark text-white rounded-lg hover:bg-ochre transition-all shadow-lg group">
+                                    <div class="flex items-center gap-4">
+                                        <div class="bg-white/20 p-2 rounded-full"><i data-lucide="credit-card" class="w-6 h-6"></i></div>
+                                        <div class="text-left">
+                                            <span class="block font-bold text-lg">Pay Online</span>
+                                            <span class="text-xs opacity-70">Credit Card / PayPal</span>
+                                        </div>
+                                    </div>
+                                    <i data-lucide="lock" class="w-5 h-5"></i>
+                                </button>
+                                
+                                <p class="text-xs text-gray-400 text-center mt-4">
+                                    <i data-lucide="shield-check" class="w-3 h-3 inline mr-1"></i> Secure SSL Transaction. Free cancellation up to 24h before first date.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bg-white border-t border-gray-200 p-6 z-10">
+            <div class="max-w-5xl mx-auto flex justify-between items-center">
+                <div class="flex flex-col">
+                    <span class="text-xs text-gray-400 uppercase tracking-wider">Estimated Total</span>
+                    <span id="wizard-total" class="text-2xl font-serif font-bold text-dark">$0</span>
+                </div>
+                <div class="flex gap-4">
+                    <button id="btn-back" onclick="prevStep()" class="px-6 py-3 border border-gray-300 text-gray-600 font-bold uppercase text-xs tracking-widest hover:bg-gray-50 transition-colors hidden">Back</button>
+                    <button id="btn-next" onclick="nextStep()" class="px-8 py-3 bg-dark text-white font-bold uppercase text-xs tracking-widest hover:bg-ochre transition-colors shadow-lg flex items-center gap-2">
+                        Next Step <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-6 bg-transparent border-b border-white/10">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-2xl font-serif font-bold tracking-tighter flex items-center gap-2 group z-50">
+                <span id="nav-logo-text" class="text-white group-hover:text-gold transition-colors duration-300">MARRAKECH</span>
+                <div class="h-2 w-2 rounded-full bg-gold shadow-[0_0_10px_#D4AF37]"></div>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8">
+                <div id="desktop-links" class="flex gap-8">
+                </div>
+                
+                <div class="flex gap-2 ml-4 border-l pl-4 border-white/30" id="lang-container">
+                    <button onclick="setLanguage('en')" class="lang-btn text-[10px] font-bold px-2 py-1 rounded border border-white text-white hover:bg-white hover:text-black transition-all tracking-widest" data-lang="en">EN</button>
+                    <button onclick="setLanguage('fr')" class="lang-btn text-[10px] font-bold px-2 py-1 rounded border border-transparent text-white/70 hover:text-white transition-all tracking-widest" data-lang="fr">FR</button>
+                    <button onclick="setLanguage('ar')" class="lang-btn text-[10px] font-bold px-2 py-1 rounded border border-transparent text-white/70 hover:text-white transition-all tracking-widest" data-lang="ar">AR</button>
+                </div>
+            </div>
+
+            <button id="mobile-toggle" class="md:hidden text-white text-2xl z-50">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden fixed inset-0 bg-white z-40 flex items-center justify-center opacity-0 transition-opacity duration-300">
+            <div id="mobile-links" class="flex flex-col text-center gap-6">
+            </div>
+        </div>
+    </nav>
+
+    <header id="home" class="relative h-screen w-full overflow-hidden flex items-center justify-center">
+        <div class="absolute inset-0 z-0">
+            <img src="https://i.pinimg.com/736x/83/b5/fc/83b5fc9cf4b9d331b4d6463684235cc3.jpg" class="w-full h-full object-cover ken-burns-bg" alt="Marrakech Desert">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
+        </div>
+
+        <div class="relative z-10 text-center text-white px-4 max-w-5xl fade-in-section">
+            <p id="hero-subtitle" class="text-sm md:text-base font-bold tracking-[0.4em] uppercase mb-6 text-gold drop-shadow-md">The Jewel of the South</p>
+            <h1 id="hero-title" class="text-6xl md:text-8xl lg:text-9xl font-serif font-bold mb-8 leading-tight">Marrakech</h1>
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                <a href="#attractions" class="px-10 py-4 bg-gold text-white hover:bg-white hover:text-dark transition-all duration-300 rounded-sm text-xs uppercase tracking-widest font-bold shadow-lg">
+                    <span id="hero-cta">Explore the City</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white animate-bounce opacity-70">
+            <i data-lucide="chevron-down" class="w-6 h-6"></i>
+        </div>
+    </header>
+
+    <section id="about" class="py-24 relative overflow-hidden bg-sand">
+        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div class="relative fade-in-section group">
+                <div class="absolute -top-6 -left-6 w-full h-full border border-ochre rounded-t-full transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2"></div>
+                <img src="https://i.pinimg.com/1200x/35/db/4d/35db4d5bf33a55caca6b571ea0a9134e.jpg" class="w-full h-[600px] object-cover rounded-t-full shadow-2xl relative z-10 grayscale-[10%] group-hover:grayscale-0 transition-all duration-700" alt="Medina">
+            </div>
+            <div class="fade-in-section delay-200">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="h-[1px] w-12 bg-ochre"></div>
+                    <h4 class="text-xs font-bold tracking-[0.2em] uppercase text-ochre">The Spirit of the City</h4>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-serif mb-8 text-dark leading-tight">Where History Meets <br><span class="italic text-majorelle">Modern Luxury</span></h2>
+                <p class="text-gray-600 leading-relaxed mb-6 font-light text-lg">
+                    Founded almost a millennium ago, Marrakech is not just a destination; it is a sensory awakening.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="attractions" class="py-24 bg-white">
+        <div class="mb-16 text-center max-w-4xl mx-auto px-4 fade-in-section">
+            <h3 class="text-xs font-bold tracking-[0.2em] uppercase mb-4 text-ochre">Discover</h3>
+            <h2 class="text-4xl md:text-5xl font-serif text-dark mb-6">Timeless Wonders</h2>
+            <p class="text-gray-500 italic">Click on any location to start building your bespoke itinerary.</p>
+            <div class="h-[1px] w-24 mx-auto bg-gold mt-6"></div>
+        </div>
+
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-12" id="attractions-grid">
+            </div>
+        </div>
+    </section>
+
+    <section id="experiences" class="py-24 bg-sand">
+        <div class="container mx-auto px-6">
+            <div class="mb-12 flex flex-col md:flex-row justify-between items-end fade-in-section">
+                <div>
+                    <h3 class="text-xs font-bold tracking-[0.2em] uppercase mb-4 text-ochre">Adventure</h3>
+                    <h2 class="text-4xl font-serif text-dark">Unforgettable Experiences</h2>
+                </div>
+                <p class="text-gray-500 text-sm max-w-md mt-4 md:mt-0">From the silence of the desert to the hustle of the souks.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 h-auto md:h-[600px] fade-in-section delay-100">
+                <div class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-lg img-zoom-container">
+                    <img src="https://i.pinimg.com/1200x/56/cc/e9/56cce92b477de123d03e24fe296465e8.jpg" class="w-full h-full object-cover" alt="Hot Air Balloon">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8">
+                        <span class="text-gold text-xs font-bold uppercase tracking-widest mb-2">Sunrise</span>
+                        <h3 class="text-3xl text-white font-serif">Atlas Sky Dining</h3>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden rounded-lg img-zoom-container h-64 md:h-auto">
+                    <img src="https://i.pinimg.com/736x/2e/5e/b8/2e5eb82ed9fe12dc3805fbf33e5cefd9.jpg" class="w-full h-full object-cover" alt="Hammam Spa">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex flex-col justify-end p-6">
+                        <h3 class="text-xl text-white font-serif">Luxury Hammam</h3>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden rounded-lg img-zoom-container h-64 md:h-auto">
+                    <img src="https://i.pinimg.com/736x/02/ca/c1/02cac17b0fa038decddcbe00e7a985be.jpg" class="w-full h-full object-cover" alt="Souk Spices">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex flex-col justify-end p-6">
+                        <h3 class="text-xl text-white font-serif">Medina Souks</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white pt-24 pb-12 border-t border-white/10">
+        <div class="container mx-auto px-6 flex flex-col items-center">
+            <div class="flex gap-6 mb-8">
+                <a href="https://www.instagram.com/youssef_digital1?igsh=MTAzMWhneGhna3Q5" target="_blank" class="group relative" title="Follow us on Instagram">
+                    <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white transition-all duration-300 group-hover:border-gold group-hover:bg-gold group-hover:text-dark group-hover:-translate-y-1">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </div>
+                </a>
+            </div>
+
+             <div class="text-[10px] text-gray-600 uppercase tracking-widest">
+                    &copy; 2024 Visit Marrakech. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+
+        const CONTENT = {
+            en: {
+                nav: ['Home', 'About', 'Attractions', 'Experiences', 'Contact'],
+                heroTitle: "Marrakech",
+                heroSubtitle: "The Jewel of the South",
+                heroCta: "Explore the City"
+            },
+            fr: {
+                nav: ['Accueil', 'À propos', 'Attractions', 'Expériences', 'Contact'],
+                heroTitle: "Marrakech",
+                heroSubtitle: "Le Joyau du Sud",
+                heroCta: "Explorer la Ville"
+            },
+            ar: {
+                nav: ['الرئيسية', 'عن مراكش', 'المعالم', 'تجارب', 'اتصل بنا'],
+                heroTitle: "مراكش",
+                heroSubtitle: "جوهرة الجنوب",
+                heroCta: "اكتشف المدينة"
+            }
+        };
+
+        const ATTRACTIONS = [
+            { 
+                name: "Jemaa el-Fnaa", 
+                cat: "Culture", 
+                img: "https://i.pinimg.com/736x/4b/a0/69/4ba06949d21d733f9dd8154244059356.jpg", 
+                desc: "The pulse of the city.",
+                activities: [
+                    { id: 1, name: "Storytelling Tour", price: 10, img: "https://i.pinimg.com/736x/a8/eb/b6/a8ebb6ceb24f95b4b23999e3b4e8f6af.jpg", desc: "A tour of the old city of Marrakech." },
+                    { id: 2, name: "Kotchi Ride", price: 25, img: "https://i.pinimg.com/1200x/65/97/8f/65978ff9f1c482ac7fbe18b3c701b4ea.jpg", desc: "City tour." },
+                    { id: 3, name: "Night Food Tour", price: 45, img: "https://i.pinimg.com/1200x/41/2c/d8/412cd849d1f9fd2d63bc418fbfd61630.jpg", desc: "Taste the best street food." }
+                ]
+            },
+            { 
+                name: "Majorelle Garden", 
+                cat: "Nature", 
+                img: "https://i.pinimg.com/736x/6e/65/f7/6e65f790ef2f483b854bc21ffb483557.jpg", 
+                desc: "Yves Saint Laurent's oasis.",
+                activities: [
+                    { id: 4, name: "Berber Museum", price: 15, img: "https://i.pinimg.com/1200x/e1/71/56/e17156202d65dd253926259a67ccaed6.jpg", desc: "History of indigenous people." },
+                    { id: 5, name: "Private Photo Session", price: 15, img: "https://i.pinimg.com/1200x/70/60/f4/7060f408372fc5a81a7e1fe83f3c573a.jpg", desc: "Professional photography." },
+                    { id: 6, name: "Botanical Tour", price: 20, img: "https://i.pinimg.com/736x/e1/48/b9/e148b95c3298cf9889ed448cfb543ffb.jpg", desc: "Expert guided plant tour." }
+                ]
+            },
+            { 
+                name: "Koutoubia Mosque", 
+                cat: "History", 
+                img: "https://i.pinimg.com/1200x/96/0f/a7/960fa7ecb5b3382e894731b730b80ea1.jpg", 
+                desc: "The city's spiritual compass.",
+                activities: [
+                    { id: 7, name: "Moroccan breakfast", price: 25, img: "https://i.pinimg.com/736x/77/e9/b4/77e9b4e592a772b360e9de0ae42eb029.jpg", desc: "Authentic Moroccan breakfast." },
+                    { id: 8, name: "Popular Foods", price: 40, img: "https://i.pinimg.com/736x/f6/5c/87/f65c8763f1e25eea950d491b04925d22.jpg", desc: "Popular Marrakesh cuisine." }
+                ]
+            },
+            { 
+                name: "Bahia Palace", 
+                cat: "Architecture", 
+                img: "https://i.pinimg.com/1200x/ed/a7/2f/eda72f7e724d3c8d048f3c3a0dc6a990.jpg", 
+                desc: "19th-century brilliance.",
+                activities: [
+                    { id: 9, name: "History Tour", price: 10, img: "https://i.pinimg.com/1200x/69/01/d5/6901d5a30ed2a40df2bc0979762b25b9.jpg", desc: "Learn about Islamic design." },
+                    { id: 10, name: "Private Photo Session", price: 27, img: "https://i.pinimg.com/736x/01/1d/a4/011da4fad83a700bf3504d1a84ce956e.jpg", desc: "Exclusive guided access." }
+                ]
+            },
+            { 
+                name: "Mount Toubkal", 
+                cat: "Adventure", 
+                img: "https://i.pinimg.com/1200x/5a/5e/7b/5a5e7b3ad4e480dcd4bdf6cdf499e986.jpg", 
+                desc: "North Africa's highest peak.",
+                activities: [
+                    { id: 11, name: "Summit Trek Guide", price: 80, img: "https://i.pinimg.com/1200x/a3/fd/43/a3fd433ae5789467fbfb4f171bf59006.jpg", desc: "Guided hike to the summit." },
+                    { id: 12, name: "Refuge Lunch", price: 150, img: "https://i.pinimg.com/736x/3e/73/b4/3e73b42ffa43af6e1cd2d35c75ad9bb6.jpg", desc: "Rest and eat with view." }
+                ]
+            },
+            { 
+                name: "Agafay Desert", 
+                cat: "Nature", 
+                img: "https://i.pinimg.com/1200x/27/9e/f4/279ef40467723bf4352eeaaf83cfd7f1.jpg", 
+                desc: "Stone desert oasis.",
+                activities: [
+                    { id: 13, name: "Luxury Camp Access", price: 100, img: "https://i.pinimg.com/736x/ef/da/98/efda982dc8c70156dd46fa4ac1df4295.jpg", desc: "Pool and mountain views." },
+                    { id: 14, name: "Quad Biking", price: 50, img: "https://i.pinimg.com/736x/db/bf/2d/dbbf2d66055c25304db69d614a923d59.jpg", desc: "Adrenaline desert tour." }
+                ]
+            },
+            { 
+                name: "Imlil Valley", 
+                cat: "Nature", 
+                img: "https://i.pinimg.com/1200x/0c/c0/87/0cc087cf19ffa21ca8933761b4bd4b33.jpg", 
+                desc: "Heart of the Atlas.",
+                activities: [
+                    { id: 15, name: "Mule Trek", price: 100, img: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=400", desc: "Traditional transport." },
+                    { id: 16, name: "Waterfall Hike", price: 35, img: "https://i.pinimg.com/736x/85/4e/52/854e524932deb2350e138ebf9b5c7522.jpg", desc: "Discovering the waterfalls." },
+                    { id: 17, name: "Berber House Lunch", price: 60, img: "https://i.pinimg.com/736x/19/22/ad/1922ad3ca4307c272509741b55c1d0ea.jpg", desc: "Authentic local meal." }
+                ]
+            }
+        ];
+
+        const VEHICLES = [
+            { id: 'v1', name: "Mercedes V-Class", type: "Luxury Van", price: 150, img: "https://i.pinimg.com/1200x/0a/35/6d/0a356d5bc89ee6f6e2f9885859c8da8b.jpg", desc: "Ultimate comfort for groups." },
+            { id: 'v2', name: "Range Rover Sport", type: "Luxury SUV", price: 250, img: "https://i.pinimg.com/736x/24/f1/7a/24f17a034f8a391a16c09fbf99bd9e46.jpg", desc: "Style and power combined." },
+            { id: 'v3', name: "Volkswagen Touareg", type: "Comfort SUV", price: 100, img: "https://i.pinimg.com/1200x/e3/a7/50/e3a7500fe472c2b80c3cf1f5a0c90410.jpg", desc: "Reliable choice for families." }
+        ];
+
+        const DRIVERS = [
+            { id: 'd1', name: "Ahmed", lang: "English, French, Arabic", img: "https://i.pinimg.com/1200x/b2/43/6a/b2436af4e8415a616fb9ccd5ecbfa85f.jpg" },
+            { id: 'd2', name: "Karim", lang: "Spanish, French, Arabic", img: "https://i.pinimg.com/1200x/fd/ec/bc/fdecbc94838252aa454362a9a9a9e33b.jpg" },
+            { id: 'd3', name: "Yassin", lang: "English, German, Arabic", img: "https://i.pinimg.com/736x/89/c0/32/89c032cad7aa2e6f4f71eec47cbab52c.jpg" }
+        ];
+
+        
+        let bookingState = {
+            step: 1,
+            
+            itinerary: [], 
+            selectedVehicle: null, 
+            selectedDriver: null, 
+            totalPrice: 0
+        };
+
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderAttractions();
+            setupScrollAnimation();
+            setLanguage('en'); 
+            
+            
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+            }, 1800);
+        });
+
+        
+
+        function startBookingWizard(idx) {
+            
+            bookingState = {
+                step: 1,
+                itinerary: [
+                    { locationIdx: idx, date: new Date().toISOString().split('T')[0], selectedActivities: [] }
+                ],
+                selectedVehicle: null,
+                selectedDriver: null,
+                totalPrice: 0
+            };
+
+            const attraction = ATTRACTIONS[idx];
+            document.getElementById('wizard-location-title').textContent = "Build Your Itinerary";
+            
+            
+            renderItineraryStep();
+            renderVehicles();
+            renderDrivers();
+            
+            updateWizardUI();
+            
+            
+            const wizard = document.getElementById('booking-wizard');
+            wizard.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeWizard() {
+            document.getElementById('booking-wizard').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function updateWizardUI() {
+            
+            for(let i=1; i<=5; i++) {
+                const dot = document.getElementById(`step-dot-${i}`);
+                if (i === bookingState.step) {
+                    dot.classList.remove('bg-gray-300', 'bg-green-500');
+                    dot.classList.add('bg-gold');
+                } else if (i < bookingState.step) {
+                    dot.classList.remove('bg-gray-300', 'bg-gold');
+                    dot.classList.add('bg-green-500');
+                } else {
+                    dot.classList.remove('bg-gold', 'bg-green-500');
+                    dot.classList.add('bg-gray-300');
+                }
+            }
+
+            
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step-${bookingState.step}`).classList.add('active');
+
+            
+            const btnBack = document.getElementById('btn-back');
+            const btnNext = document.getElementById('btn-next');
+            
+            if (bookingState.step === 1) btnBack.classList.add('hidden');
+            else btnBack.classList.remove('hidden');
+
+            if (bookingState.step === 5) {
+                btnNext.classList.add('hidden');
+            } else {
+                btnNext.classList.remove('hidden');
+                btnNext.innerHTML = 'Next Step <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>';
+            }
+            
+            lucide.createIcons();
+            calculateTotal();
+        }
+
+        function nextStep() {
+            if (bookingState.step < 5) {
+                // Validation
+                if(bookingState.step === 1) {
+                    
+                    for(let item of bookingState.itinerary) {
+                        if(!item.date) {
+                            alert("Please select a date for all destinations.");
+                            return;
+                        }
+                    }
+                    
+                    renderActivities();
+                }
+
+                if(bookingState.step === 2) {
+
+                }
+
+                if(bookingState.step === 3 && !bookingState.selectedVehicle) {
+                    alert("Please select a vehicle.");
+                    return;
+                }
+                if(bookingState.step === 4 && !bookingState.selectedDriver) {
+                    alert("Please select a driver.");
+                    return;
+                }
+                
+                if(bookingState.step === 4) {
+                    renderSummary();
+                }
+
+                bookingState.step++;
+                updateWizardUI();
+            }
+        }
+
+        function prevStep() {
+            if (bookingState.step > 1) {
+                bookingState.step--;
+                updateWizardUI();
+            }
+        }
+
+
+        function renderItineraryStep() {
+            const container = document.getElementById('itinerary-container');
+            container.innerHTML = '';
+
+            bookingState.itinerary.forEach((item, index) => {
+                const attraction = ATTRACTIONS[item.locationIdx];
+                const dayLabel = `Day ${index + 1}`;
+                
+                const cardHtml = `
+                    <div class="bg-white p-4 border rounded-lg shadow-sm flex flex-col md:flex-row gap-4 items-center relative animate-fade-in">
+                        <div class="w-full md:w-32 h-24 rounded overflow-hidden flex-shrink-0">
+                            <img src="${attraction.img}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 w-full">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold uppercase tracking-widest text-ochre">${dayLabel}</span>
+                                ${index > 0 ? `<button onclick="removeDestination(${index})" class="text-red-400 hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-1">Destination</label>
+                                    <select onchange="updateItineraryLocation(${index}, this.value)" class="w-full p-2 border rounded font-serif bg-gray-50">
+                                        ${ATTRACTIONS.map((att, idx) => `
+                                            <option value="${idx}" ${idx === item.locationIdx ? 'selected' : ''} ${isLocationSelected(idx, index) ? 'disabled' : ''}>${att.name}</option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-1">Date</label>
+                                    <input type="date" value="${item.date}" onchange="updateItineraryDate(${index}, this.value)" min="${new Date().toISOString().split('T')[0]}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+            lucide.createIcons();
+        }
+
+        function isLocationSelected(locationIdx, currentIndex) {
+
+            return bookingState.itinerary.some((item, idx) => idx !== currentIndex && item.locationIdx === locationIdx);
+        }
+
+        function addDestination() {
+
+            let nextIdx = -1;
+            for(let i=0; i<ATTRACTIONS.length; i++) {
+                if(!bookingState.itinerary.some(item => item.locationIdx === i)) {
+                    nextIdx = i;
+                    break;
+                }
+            }
+
+            if(nextIdx === -1) {
+                alert("You have selected all available destinations!");
+                return;
+            }
+
+
+            const lastDate = new Date(bookingState.itinerary[bookingState.itinerary.length - 1].date);
+            const nextDate = new Date(lastDate);
+            nextDate.setDate(lastDate.getDate() + 1);
+
+            bookingState.itinerary.push({
+                locationIdx: nextIdx,
+                date: nextDate.toISOString().split('T')[0],
+                selectedActivities: []
+            });
+
+            renderItineraryStep();
+        }
+
+        function removeDestination(index) {
+            bookingState.itinerary.splice(index, 1);
+            renderItineraryStep();
+        }
+
+        function updateItineraryLocation(index, value) {
+            bookingState.itinerary[index].locationIdx = parseInt(value);
+
+            renderItineraryStep();
+        }
+
+        function updateItineraryDate(index, value) {
+            bookingState.itinerary[index].date = value;
+        }
+
+
+
+
+        function renderActivities() {
+            const container = document.getElementById('wizard-activities-container');
+            container.innerHTML = '';
+
+            bookingState.itinerary.forEach((dayItem, dayIndex) => {
+                const location = ATTRACTIONS[dayItem.locationIdx];
+                const dayLabel = `Day ${dayIndex + 1}: ${location.name}`;
+                
+                const sectionHtml = `
+                    <div class="mb-10">
+                        <h4 class="font-serif text-xl font-bold text-dark mb-4 border-b pb-2 flex justify-between">
+                            <span>${dayLabel}</span>
+                            <span class="text-sm font-sans font-normal text-gray-500">${dayItem.date}</span>
+                        </h4>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${location.activities.map(act => `
+                                <div onclick="toggleActivity(${dayIndex}, ${act.id})" 
+                                    id="act-card-${dayIndex}-${act.id}"
+                                    class="border border-gray-200 rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-all group relative ${dayItem.selectedActivities.includes(act.id) ? 'border-green-500 ring-2 ring-green-100' : ''}">
+                                    <div class="h-40 overflow-hidden">
+                                        <img src="${act.img}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                    </div>
+                                    <div class="p-4">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <h4 class="font-serif text-md text-dark group-hover:text-ochre transition-colors">${act.name}</h4>
+                                            <span class="text-gold font-bold text-md">$${act.price}</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500">${act.desc}</p>
+                                    </div>
+                                    <div id="act-check-${dayIndex}-${act.id}" class="absolute top-4 right-4 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white ${dayItem.selectedActivities.includes(act.id) ? 'flex' : 'hidden'}">
+                                        <i data-lucide="check" class="w-4 h-4"></i>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += sectionHtml;
+            });
+            lucide.createIcons();
+        }
+
+        function toggleActivity(dayIndex, actId) {
+            const dayItem = bookingState.itinerary[dayIndex];
+            const actIdx = dayItem.selectedActivities.indexOf(actId);
+            
+            if (actIdx === -1) {
+                dayItem.selectedActivities.push(actId);
+            } else {
+                dayItem.selectedActivities.splice(actIdx, 1);
+            }
+            
+
+            const card = document.getElementById(`act-card-${dayIndex}-${actId}`);
+            const check = document.getElementById(`act-check-${dayIndex}-${actId}`);
+            
+            if (dayItem.selectedActivities.includes(actId)) {
+                card.classList.add('border-green-500', 'ring-2', 'ring-green-100');
+                check.classList.remove('hidden');
+                check.classList.add('flex');
+            } else {
+                card.classList.remove('border-green-500', 'ring-2', 'ring-green-100');
+                check.classList.add('hidden');
+                check.classList.remove('flex');
+            }
+
+            calculateTotal();
+        }
+
+
+
+        function renderVehicles() {
+            const container = document.getElementById('wizard-vehicles-grid');
+            container.innerHTML = VEHICLES.map(veh => `
+                <div onclick="selectVehicle('${veh.id}')" 
+                     id="veh-card-${veh.id}"
+                     class="border border-gray-200 rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-all group relative">
+                    <!-- Changed height from h-64 to h-80 for larger vehicle images -->
+                    <div class="h-80 overflow-hidden">
+                        <img src="${veh.img}" class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110">
+                    </div>
+                    <div class="p-6 text-center">
+                        <h4 class="font-serif text-lg text-dark mb-1">${veh.name}</h4>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-400 block mb-3">${veh.type}</span>
+                        <span class="text-gold font-bold text-xl">$${veh.price}<span class="text-xs text-gray-400 font-normal">/day</span></span>
+                    </div>
+                    <div id="veh-check-${veh.id}" class="absolute top-4 right-4 w-8 h-8 bg-green-500 rounded-full items-center justify-center text-white hidden">
+                        <i data-lucide="check" class="w-5 h-5"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectVehicle(id) {
+            bookingState.selectedVehicle = id;
+            VEHICLES.forEach(v => {
+                const card = document.getElementById(`veh-card-${v.id}`);
+                const check = document.getElementById(`veh-check-${v.id}`);
+                if (v.id === id) {
+                    card.classList.add('border-green-500', 'ring-2', 'ring-green-100');
+                    check.classList.remove('hidden');
+                    check.classList.add('flex');
+                } else {
+                    card.classList.remove('border-green-500', 'ring-2', 'ring-green-100');
+                    check.classList.add('hidden');
+                    check.classList.remove('flex');
+                }
+            });
+            calculateTotal();
+        }
+
+        function renderDrivers() {
+            const container = document.getElementById('wizard-drivers-grid');
+            container.innerHTML = DRIVERS.map(drv => `
+                <div onclick="selectDriver('${drv.id}')" 
+                     id="drv-card-${drv.id}"
+                     class="flex items-center gap-4 p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-gold transition-colors">
+                    <img src="${drv.img}" class="w-12 h-12 rounded-full object-cover">
+                    <div>
+                        <h5 class="font-bold text-dark">${drv.name}</h5>
+                        <p class="text-xs text-gray-500">Speaks: ${drv.lang}</p>
+                    </div>
+                    <div id="drv-check-${drv.id}" class="ml-auto text-green-500 hidden">
+                        <i data-lucide="check-circle" class="w-6 h-6 fill-current"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectDriver(id) {
+            bookingState.selectedDriver = id;
+            DRIVERS.forEach(d => {
+                const card = document.getElementById(`drv-card-${d.id}`);
+                const check = document.getElementById(`drv-check-${d.id}`);
+                if (d.id === id) {
+                    card.classList.add('border-green-500', 'bg-green-50');
+                    card.classList.remove('border-gray-200');
+                    check.classList.remove('hidden');
+                } else {
+                    card.classList.remove('border-green-500', 'bg-green-50');
+                    card.classList.add('border-gray-200');
+                    check.classList.add('hidden');
+                }
+            });
+        }
+
+
+
+        function calculateTotal() {
+            let total = 0;
+            const tripDays = bookingState.itinerary.length;
+            
+
+            bookingState.itinerary.forEach(dayItem => {
+                const location = ATTRACTIONS[dayItem.locationIdx];
+                dayItem.selectedActivities.forEach(actId => {
+                    const act = location.activities.find(a => a.id === actId);
+                    if(act) total += act.price;
+                });
+            });
+
+
+            if(bookingState.selectedVehicle) {
+                const veh = VEHICLES.find(v => v.id === bookingState.selectedVehicle);
+                if(veh) total += (veh.price * tripDays); 
+            }
+
+            bookingState.totalPrice = total;
+            document.getElementById('wizard-total').textContent = `$${total}`;
+            document.getElementById('summary-total').textContent = `$${total}`;
+        }
+
+        function renderSummary() {
+            const container = document.getElementById('summary-content');
+            const vehicle = VEHICLES.find(v => v.id === bookingState.selectedVehicle);
+            const driver = DRIVERS.find(d => d.id === bookingState.selectedDriver);
+            const tripDays = bookingState.itinerary.length;
+
+            let html = `
+                <div class="flex justify-between text-xs text-gray-500 uppercase tracking-widest mb-4">
+                    <span>Total Duration</span>
+                    <span>${tripDays} Days</span>
+                </div>
+            `;
+
+            bookingState.itinerary.forEach((dayItem, idx) => {
+                const location = ATTRACTIONS[dayItem.locationIdx];
+                const activities = location.activities.filter(a => dayItem.selectedActivities.includes(a.id));
+                
+                html += `
+                    <div class="mb-4 pb-4 border-b border-gray-100 last:border-0">
+                        <div class="flex justify-between font-bold text-dark">
+                            <span>Day ${idx+1}: ${location.name}</span>
+                            <span class="text-xs font-normal text-gray-500">${dayItem.date}</span>
+                        </div>
+                        <div class="pl-2 mt-2 space-y-1">
+                            ${activities.length > 0 ? activities.map(a => `
+                                <div class="flex justify-between text-xs">
+                                    <span>- ${a.name}</span>
+                                    <span>$${a.price}</span>
+                                </div>
+                            `).join('') : '<span class="text-xs italic text-gray-400">No activities selected</span>'}
+                        </div>
+                    </div>
+                `;
+            });
+
+            if(vehicle) {
+                html += `
+                     <div class="flex justify-between pt-2">
+                        <span class="text-gray-500">Vehicle (${tripDays} days)</span>
+                        <span class="font-bold text-dark">${vehicle.name}</span>
+                    </div>
+                `;
+            }
+            if(driver) {
+                html += `
+                     <div class="flex justify-between">
+                        <span class="text-gray-500">Driver</span>
+                        <span class="font-bold text-dark">${driver.name}</span>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function sendToWhatsApp() {
+            let message = `*New Multi-Day Booking Request!* 🌴%0A`;
+            
+            bookingState.itinerary.forEach((day, idx) => {
+                const loc = ATTRACTIONS[day.locationIdx].name;
+                const acts = ATTRACTIONS[day.locationIdx].activities
+                    .filter(a => day.selectedActivities.includes(a.id))
+                    .map(a => a.name).join(', ');
+                
+                message += `*Day ${idx+1} (${day.date}):* ${loc}%0A`;
+                message += `Activities: ${acts || 'None'}%0A%0A`;
+            });
+
+            const vehicle = VEHICLES.find(v => v.id === bookingState.selectedVehicle)?.name || 'None';
+            const driver = DRIVERS.find(d => d.id === bookingState.selectedDriver)?.name || 'None';
+
+            message += `Vehicle: ${vehicle}%0A`;
+            message += `Driver: ${driver}%0A`;
+            message += `Total Price: $${bookingState.totalPrice}%0A`;
+            message += `Please confirm availability.`;
+
+            const url = `https://wa.me/212778036867?text=${message}`;
+            window.open(url, '_blank');
+        }
+
+
+
+        function renderAttractions() {
+            const container = document.getElementById('attractions-grid');
+            container.innerHTML = ATTRACTIONS.map((spot, idx) => `
+                <div onclick="startBookingWizard(${idx})" class="group cursor-pointer fade-in-section" style="transition-delay: ${idx * 100}ms">
+                    <!-- Increased height from h-96 to h-[500px] -->
+                    <!-- CHANGED: Height increased to h-[600px] for even taller images -->
+                    <div class="relative overflow-hidden h-[600px] mb-6 bg-gray-900 rounded-lg shadow-md hover:shadow-2xl transition-all duration-500">
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                        
+                        <!-- Image: Changed to Scale for Zoom Effect -->
+                        <img src="${spot.img}" alt="${spot.name}" class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-125">
+                        
+                        <!-- Explore Icon Overlay -->
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20">
+                            <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm border border-white/50 flex items-center justify-center text-white transform scale-75 group-hover:scale-100 transition-transform duration-500">
+                                <span class="uppercase font-bold tracking-widest text-xs drop-shadow-md">Explore</span>
+                            </div>
+                        </div>
+
+                        <div class="absolute bottom-6 left-6 z-20">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-white bg-ochre px-2 py-1 mb-2 inline-block shadow-sm">${spot.cat}</span>
+                            <h3 class="text-2xl font-serif text-white group-hover:translate-x-2 transition-transform duration-300 drop-shadow-lg">${spot.name}</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm leading-relaxed border-l-2 border-gray-100 pl-4 group-hover:border-ochre transition-colors">${spot.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function setLanguage(lang) {
+            const data = CONTENT[lang];
+            document.getElementById('hero-title').textContent = data.heroTitle;
+            document.getElementById('hero-subtitle').textContent = data.heroSubtitle;
+            document.getElementById('hero-cta').textContent = data.heroCta;
+            
+            const linkIds = ['#home', '#about', '#attractions', '#experiences', '#booking'];
+            const desktopHTML = data.nav.map((text, i) => 
+                `<a href="${linkIds[i]}" class="nav-link text-xs font-bold uppercase tracking-widest underline-anim text-white">${text}</a>`
+            ).join('');
+            
+            document.getElementById('desktop-links').innerHTML = desktopHTML;
+            document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        }
+
+        function setupScrollAnimation() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in-section').forEach((el) => {
+                observer.observe(el);
+            });
+        }
+
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const logoText = document.getElementById('nav-logo-text');
+            const mobileToggle = document.getElementById('mobile-toggle');
+            
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-white', 'shadow-md', 'py-4');
+                navbar.classList.remove('bg-transparent', 'py-6', 'border-b');
+                logoText.classList.remove('text-white');
+                logoText.classList.add('text-ochre');
+                mobileToggle.classList.remove('text-white');
+                mobileToggle.classList.add('text-dark');
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.replace('text-white', 'text-dark'));
+            } else {
+                navbar.classList.remove('bg-white', 'shadow-md', 'py-4');
+                navbar.classList.add('bg-transparent', 'py-6', 'border-b');
+                logoText.classList.add('text-white');
+                logoText.classList.remove('text-ochre');
+                mobileToggle.classList.add('text-white');
+                mobileToggle.classList.remove('text-dark');
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.replace('text-dark', 'text-white'));
+            }
+        });
+    </script>
+</body>
+</html>
